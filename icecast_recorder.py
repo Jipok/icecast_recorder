@@ -3,8 +3,8 @@ import os
 import sys
 import traceback
 from urllib.request import Request, urlopen
-from time import time, strftime, gmtime
-
+from time import time
+from datetime import timedelta
 
 if len(sys.argv) != 2:
     print("Usage: icecast_recorder.py <url>")
@@ -69,12 +69,12 @@ try:
 
         # Processing track change
         if metadata is not None:
-            time_offset = strftime("%H:%M:%S", gmtime(time() - start_time))
+            time_offset = timedelta(seconds = round(time() - start_time))
             if "StreamTitle" in metadata:
                 stream_title = metadata["StreamTitle"].replace('/', '\\')
                 file.close()
                 #os.system("mp3check --add-tag --cut-junk-start --cut-junk-end '"+file.name+"' > /dev/null")
-                print(time_offset + "   " + stream_title)
+                print(str(time_offset) + "   " + stream_title)
                 file = open(str(counter) + ". " + stream_title + ".mp3", "wb")
                 counter += 1
             else:
